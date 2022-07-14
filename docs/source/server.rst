@@ -26,17 +26,12 @@ as found in the configuration file, is shown below:
     [server]
     hostname=127.0.0.1
     port=5696
-    certificate_path=/path/to/certificate/file
-    key_path=/path/to/certificate/key/file
-    ca_path=/path/to/ca/certificate/file
-    auth_suite=Basic
-    policy_path=/path/to/policy/file
-    enable_tls_client_auth=True
-    tls_cipher_suites=
-        TLS_RSA_WITH_AES_128_CBC_SHA256
-        TLS_RSA_WITH_AES_256_CBC_SHA256
-        TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384
-    logging_level=DEBUG
+    certificate_path=/etc/pykmip/certs/cert.pem
+    key_path=/etc/pykmip/certs/key.pem
+    ca_path=/etc/pykmip/certs/cert.pem
+    auth_suite=TLS1.2
+    enable_tls_client_auth=False
+    policy_path=/etc/pykmip/policies/
     database_path=/tmp/pykmip.db
 
 The server can also be configured manually via Python. The following example
@@ -47,23 +42,15 @@ different configuration values:
 
     >>> from kmip.services.server import KmipServer
     >>> server = KmipServer(
-    ...     hostname='127.0.0.1',
-    ...     port=5696,
-    ...     certificate_path='/path/to/certificate/file/',
-    ...     key_path='/path/to/certificate/key/file/',
-    ...     ca_path='/path/to/ca/certificate/file/',
-    ...     auth_suite='Basic',
-    ...     config_path='/etc/pykmip/server.conf',
-    ...     log_path='/var/log/pykmip/server.log',
-    ...     policy_path='/etc/pykmip/policies',
-    ...     enable_tls_client_auth=True,
-    ...     tls_cipher_suites=[
-    ...         'TLS_RSA_WITH_AES_128_CBC_SHA256',
-    ...         'TLS_RSA_WITH_AES_256_CBC_SHA256',
-    ...         'TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384'
-    ...     ],
-    ...     logging_level='DEBUG',
-    ...     database_path='/tmp/pykmip.db'
+    ...     hostname=127.0.0.1
+    ...     port=5696
+    ...     certificate_path=/etc/pykmip/certs/cert.pem
+    ...     key_path=/etc/pykmip/certs/key.pem
+    ...     ca_path=/etc/pykmip/certs/cert.pem
+    ...     auth_suite=TLS1.2
+    ...     enable_tls_client_auth=False
+    ...     policy_path=/etc/pykmip/policies/
+    ...     database_path=/tmp/pykmip.db
     ... )
 
 The different configuration options are defined below:
@@ -159,19 +146,37 @@ integration, see :ref:`third-party-auth-integration`.
 
 Usage
 -----
+Python 2.7
+~~~~~~~~~~
 The software server can be run using the ``bin/run_server.py`` startup script.
 If you are currently in the PyKMIP root directory, use the following command:
 
 .. code-block:: console
 
-   $ python bin/run_server.py
+   $ sudo python bin/run_server.py
 
 If you need more information about running the startup script, pass ``-h``
 to it:
 
 .. code-block: console
 
-   $ python bin/run_server.py -h
+   $ sudo python bin/run_server.py -h
+
+Python 3.4+
+~~~~~~~~~~~
+The software server can be run using the ``bin/run_server.py`` startup script.
+If you are currently in the PyKMIP root directory, use the following command:
+
+.. code-block:: console
+
+   $ sudo python3 bin/run_server.py
+
+If you need more information about running the startup script, pass ``-h``
+to it:
+
+.. code-block: console
+
+   $ sudo python3 bin/run_server.py -h
 
 .. note::
    You may need to run the server as root, depending on the permissions of the
@@ -185,7 +190,7 @@ PyKMIP server once PyKMIP is installed. You can use the entry point like this:
 
 .. code-block:: console
 
-    $ pykmip-server
+    $ sudo pykmip-server
 
 Storage
 -------

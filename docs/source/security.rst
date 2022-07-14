@@ -21,7 +21,7 @@ to collect additional information and work with you to address the security
 issue. If applicable, a new library subrelease will be produced across all
 actively supported releases to address and fix the issue.
 
-If the developerment team decides the issue does not warrant the sensitivity
+If the development team decides the issue does not warrant the sensitivity
 of a security issue, you may file a public GitHub issue on the project
 `issue tracker`_.
 
