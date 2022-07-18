@@ -49,20 +49,20 @@ Python 2.7
 
 .. code:: console
 
-    $ sudo pip install -r doc-requirements.txt
+    $ pip install -r doc-requirements.txt
 
 Python 3.4+
 ~~~~~~~~~~
 
 .. code:: console
 
-    $ sudo pip3 install -r doc-requirements.txt
+    $ pip3 install -r doc-requirements.txt
 
 To build the documentation, navigate into the ``docs`` directory and run:
 
 .. code:: console
 
-    $ sudo make html
+    $ make html
 
 This will build the PyKMIP documentation as HTML and place it under the new
 ``docs/build/html`` directory. View it using your preferred web browser.
@@ -129,19 +129,19 @@ To setup tox please run the following:
 
 .. code-block:: console
 
-    $ sudo ./.travis/run.sh
+    $ ./.travis/run.sh
 
 The style checks leverage ``flake8`` and can be run like so:
 
 .. code-block:: console
 
-    $ sudo tox -e pep8
+    $ tox -e pep8
 
 The security checks use ``bandit`` and can be run like so:
 
 .. code-block:: console
 
-    $ sudo tox -e bandit
+    $ tox -e bandit
 
 The documentation checks leverage ``sphinx`` to build the HTML documentation
 in a temporary directory, verifying that there are no errors. These checks
@@ -149,14 +149,14 @@ can be run like so:
 
 .. code-block:: console
 
-    $ sudo tox -e docs
+    $ tox -e docs
 
 To run the above checks along with the entire unit test suite, simply run
 ``tox`` without any arguments:
 
 .. code-block:: console
 
-    $ sudo tox
+    $ tox
 
 Unit Tests
 ~~~~~~~~~~
@@ -169,7 +169,7 @@ To test against a specific Python version (e.g., Python 2.7), run:
 
 .. code-block:: console
 
-    $ sudo tox -e py27
+    $ tox -e py27
 
 To run an individual test suite method or class, use the ``pytest`` ``-k``
 flag to specify the name of the method or class to execute. For example, to
@@ -177,7 +177,7 @@ run the ``TestProxyKmipClient`` test suite class under Python 2.7, run:
 
 .. code-block:: console
 
-    $ sudo tox -e py27 -- -k TestProxyKmipClient
+    $ tox -e py27 -- -k TestProxyKmipClient
 
 For more information on the ``-k`` flag, see the `pytest`_ documentation.
 
@@ -209,14 +209,14 @@ following ``tox`` command will set up and execute the integration tests:
 
 .. code-block:: console
 
-    $ sudo tox -r -e integration -- --config client
+    $ tox -r -e integration -- --config client
 
 Like the unit tests, use the ``-k`` flag to specify a specific test suite
 method or class.
 
 .. code-block:: console
 
-    $ sudo tox -r -e integration -- --config client -k TestProxyKmipClientIntegration
+    $ tox -r -e integration -- --config client -k TestProxyKmipClientIntegration
 
 Functional Tests
 ~~~~~~~~~~~~~~~~
@@ -245,14 +245,14 @@ will set up and execute the functional tests:
 
 .. code-block:: console
 
-    $ sudo tox -r -e functional -- --config-file /tmp/pykmip/client.conf
+    $ tox -r -e functional -- --config-file /tmp/pykmip/client.conf
 
 Like the unit and integration tests, use the ``-k`` flag to specify a specific
 test suite method or class.
 
 .. code-block:: console
 
-    $ sudo tox -r -e functional -- --config-file /tmp/pykmip/client.conf -k test_policy_caching
+    $ tox -r -e functional -- --config-file /tmp/pykmip/client.conf -k test_policy_caching
 
 For more information on the testing tools used here, see the following
 resources:

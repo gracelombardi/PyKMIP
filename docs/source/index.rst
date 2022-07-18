@@ -26,14 +26,14 @@ Python 2.7
 
 .. code-block:: console
 
-    $ sudo pip install pykmip
+    $ pip install pykmip
 
 Python 3.4+
 ~~~~~~~~~~~
 
 .. code-block:: console
 
-    $ sudo pip3 install pykmip
+    $ pip3 install pykmip
 
 See :doc:`Installation <installation>` for more information.
 

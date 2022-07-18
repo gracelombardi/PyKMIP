@@ -6,7 +6,7 @@ You can install PyKMIP via ``pip``
 
 .. code-block:: console
 
-    $ sudo pip install pykmip
+    $ pip install pykmip
 
 Python 3.4+
 ~~~~~~~~~~~
@@ -14,7 +14,7 @@ You can install PyKMIP via ``pip3``:
 
 .. code-block:: console
 
-    $ sudo pip3 install pykmip
+    $ pip3 install pykmip
 
 Supported platforms
 -------------------
@@ -35,8 +35,8 @@ You can install PyKMIP from source via ``git``:
 
 .. code-block:: console
 
-    $ sudo git clone https://github.com/openkmip/pykmip.git
-    $ sudo python pykmip/setup.py install
+    $ git clone https://github.com/openkmip/pykmip.git
+    $ python pykmip/setup.py install
 
 Ubuntu
 ******
@@ -46,7 +46,7 @@ dependencies, including headers for Python, OpenSSL, ``libffi``, and
 
 .. code-block:: console
 
-    $ sudo apt-get install python-dev libffi-dev libssl-dev libsqlite3-dev
+    $ apt-get install python-dev libffi-dev libssl-dev libsqlite3-dev
 
 
 Python 3.4+
@@ -55,8 +55,8 @@ You can install PyKMIP from source via ``git``:
 
 .. code-block:: console
 
-    $ sudo git clone https://github.com/openkmip/pykmip.git
-    $ sudo python3 pykmip/setup.py install
+    $ git clone https://github.com/openkmip/pykmip.git
+    $ python3 pykmip/setup.py install
 
 Ubuntu
 ******
@@ -66,4 +66,4 @@ dependencies, including headers for Python, OpenSSL, ``libffi``, and
 
 .. code-block:: console
 
-    $ sudo apt-get install python3-dev libffi-dev libssl-dev libsqlite3-dev
+    $ apt-get install python3-dev libffi-dev libssl-dev libsqlite3-dev

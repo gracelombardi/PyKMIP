@@ -153,14 +153,14 @@ If you are currently in the PyKMIP root directory, use the following command:
 
 .. code-block:: console
 
-   $ sudo python bin/run_server.py
+   $ python bin/run_server.py
 
 If you need more information about running the startup script, pass ``-h``
 to it:
 
 .. code-block: console
 
-   $ sudo python bin/run_server.py -h
+   $ python bin/run_server.py -h
 
 Python 3.4+
 ~~~~~~~~~~~
@@ -169,14 +169,14 @@ If you are currently in the PyKMIP root directory, use the following command:
 
 .. code-block:: console
 
-   $ sudo python3 bin/run_server.py
+   $ python3 bin/run_server.py
 
 If you need more information about running the startup script, pass ``-h``
 to it:
 
 .. code-block: console
 
-   $ sudo python3 bin/run_server.py -h
+   $ python3 bin/run_server.py -h
 
 .. note::
    You may need to run the server as root, depending on the permissions of the
@@ -190,7 +190,7 @@ PyKMIP server once PyKMIP is installed. You can use the entry point like this:
 
 .. code-block:: console
 
-    $ sudo pykmip-server
+    $ pykmip-server
 
 Storage
 -------
