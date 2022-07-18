@@ -24,6 +24,10 @@ from kmip.core.messages.payloads.activate import (
     ActivateRequestPayload,
     ActivateResponsePayload
 )
+from kmip.core.messages.payloads.add_attribute import (
+    AddAttributeRequestPayload,
+    AddAttributeResponsePayload
+)
 from kmip.core.messages.payloads.archive import (
     ArchiveRequestPayload,
     ArchiveResponsePayload
@@ -144,6 +148,8 @@ from kmip.core.messages.payloads.signature_verify import (
 __all__ = [
     "ActivateRequestPayload",
     "ActivateResponsePayload",
+    "AddAttributeRequestPayload",
+    "AddAttributeResponsePayload",
     "ArchiveRequestPayload",
     "ArchiveResponsePayload",
     "CancelRequestPayload",

@@ -799,6 +799,43 @@ class TestProxyKmipClient(testtools.TestCase):
         "kmip.pie.client.KMIPProxy",
         mock.MagicMock(spec_set=KMIPProxy)
     )
+    def test_add_attribute(self):
+        """
+        Test that the client can add an attribute.
+        """
+        request_payload = payloads.AddAttributeRequestPayload(
+            unique_identifier="1",
+            new_attribute=obj.NewAttribute(
+                attribute=primitives.Boolean(
+                    value=True,
+                    tag=enums.Tags.SENSITIVE
+                )
+            )
+        )
+        response_payload = payloads.AddAttributeResponsePayload(
+            unique_identifier="1"
+        )
+
+        with ProxyKmipClient() as client:
+            client.proxy.send_request_payload.return_value = response_payload
+
+            unique_identifier = client.add_attribute(
+                "1",
+                attribute_name="Sensitive",
+                attribute_value=True
+            )
+
+            args = (
+                enums.Operation.ADD_ATTRIBUTE,
+                request_payload
+            )
+            client.proxy.send_request_payload.assert_called_with(*args)
+            self.assertEqual("1", unique_identifier)
+
+    @mock.patch(
+        "kmip.pie.client.KMIPProxy",
+        mock.MagicMock(spec_set=KMIPProxy)
+    )
     def test_set_attribute(self):
         """
         Test that the client can set an attribute.
