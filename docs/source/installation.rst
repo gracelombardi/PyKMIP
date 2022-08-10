@@ -1,10 +1,20 @@
 Installation
 ============
-You can install PyKMIP via ``pip``:
+Python 2.7
+~~~~~~~~~~
+You can install PyKMIP via ``pip``
 
 .. code-block:: console
 
     $ pip install pykmip
+
+Python 3.4+
+~~~~~~~~~~~
+You can install PyKMIP via ``pip3``:
+
+.. code-block:: console
+
+    $ pip3 install pykmip
 
 Supported platforms
 -------------------
@@ -18,6 +28,9 @@ officially supported or tested.
 
 Building PyKMIP on Linux
 ------------------------
+
+Python 2.7
+~~~~~~~~~~
 You can install PyKMIP from source via ``git``:
 
 .. code-block:: console
@@ -25,14 +38,32 @@ You can install PyKMIP from source via ``git``:
     $ git clone https://github.com/openkmip/pykmip.git
     $ python pykmip/setup.py install
 
+Ubuntu
+******
 If you are on a fresh Linux build, you may also need several additional system
 dependencies, including headers for Python, OpenSSL, ``libffi``, and
 ``libsqlite3``.
 
-Ubuntu
-~~~~~~
-Replace ``python-dev`` with ``python3-dev`` if you are using Python 3.0+.
+.. code-block:: console
+
+    $ apt-get install python-dev libffi-dev libssl-dev libsqlite3-dev
+
+
+Python 3.4+
+~~~~~~~~~~~
+You can install PyKMIP from source via ``git``:
 
 .. code-block:: console
 
-    $ sudo apt-get install python-dev libffi-dev libssl-dev libsqlite3-dev
+    $ git clone https://github.com/openkmip/pykmip.git
+    $ python3 pykmip/setup.py install
+
+Ubuntu
+******
+If you are on a fresh Linux build, you may also need several additional system
+dependencies, including headers for Python, OpenSSL, ``libffi``, and
+``libsqlite3``.
+
+.. code-block:: console
+
+    $ apt-get install python3-dev libffi-dev libssl-dev libsqlite3-dev

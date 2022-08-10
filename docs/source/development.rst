@@ -44,9 +44,19 @@ All PyKMIP documentation is written in `RST`_ format and managed using
 If you are interested in contributing to the project documentation, install
 the project documentation requirements:
 
+Python 2.7
+~~~~~~~~~~
+
 .. code:: console
 
     $ pip install -r doc-requirements.txt
+
+Python 3.4+
+~~~~~~~~~~
+
+.. code:: console
+
+    $ pip3 install -r doc-requirements.txt
 
 To build the documentation, navigate into the ``docs`` directory and run:
 
@@ -114,6 +124,12 @@ provided for security, style, and documentation checks.
     All of the ``tox`` commands discussed in this section should be run from
     the root of the PyKMIP repository, in the same directory as the
     ``tox.ini`` configuration file.
+
+To setup tox please run the following:
+
+.. code-block:: console
+
+    $ ./.travis/run.sh
 
 The style checks leverage ``flake8`` and can be run like so:
 
@@ -188,19 +204,19 @@ when invoking the integration tests.
 
 To run the integration test suite, the configuration file section name for
 the client settings must be passed to the test suite using the ``--config``
-configuration argument. Assuming the section name is ``server_1``, the
+configuration argument. Assuming the section name is ``client``, the
 following ``tox`` command will set up and execute the integration tests:
 
 .. code-block:: console
 
-    $ tox -r -e integration -- --config server_1
+    $ tox -r -e integration -- --config client
 
 Like the unit tests, use the ``-k`` flag to specify a specific test suite
 method or class.
 
 .. code-block:: console
 
-    $ tox -r -e integration -- --config server_1 -k TestProxyKmipClientIntegration
+    $ tox -r -e integration -- --config client -k TestProxyKmipClientIntegration
 
 Functional Tests
 ~~~~~~~~~~~~~~~~

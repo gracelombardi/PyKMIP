@@ -14,11 +14,11 @@ settings block, as found in the configuration file, is shown below:
     [client]
     host=127.0.0.1
     port=5696
-    certfile=/path/to/certificate/file
-    keyfile=/path/to/certificate/key/file
-    ca_certs=/path/to/ca/certificate/file
+    keyfile=/etc/pykmip/certs/key.pem
+    certfile=/etc/pykmip/certs/cert.pem
     cert_reqs=CERT_REQUIRED
     ssl_version=PROTOCOL_SSLv23
+    ca_certs=/etc/pykmip/certs/cert.pem
     do_handshake_on_connect=True
     suppress_ragged_eofs=True
     username=example_username
@@ -95,17 +95,17 @@ specifying the different configuration values:
     >>> import ssl
     >>> from kmip.pie.client import ProxyKmipClient, enums
     >>> client = ProxyKmipClient(
-    ...     hostname='127.0.0.1',
-    ...     port=5696,
-    ...     cert='/path/to/certificate/file',
-    ...     key='/path/to/certificate/key/file',
-    ...     ca='/path/to/ca/certificate/file',
-    ...     ssl_version=ssl.PROTOCOL_SSLv23,
-    ...     username='example_username',
-    ...     password='example_password',
-    ...     config='client',
-    ...     config_file='/etc/pykmip/pykmip.conf',
-    ...     kmip_version=enums.KMIPVersion.KMIP_1_2
+    ...        host=127.0.0.1
+    ...        port=5696
+    ...        keyfile=/etc/pykmip/certs/key.pem
+    ...        certfile=/etc/pykmip/certs/cert.pem
+    ...        cert_reqs=CERT_REQUIRED
+    ...        ssl_version=PROTOCOL_SSLv23
+    ...        ca_certs=/etc/pykmip/certs/cert.pem
+    ...        do_handshake_on_connect=True
+    ...        suppress_ragged_eofs=True
+    ...        username=example_username
+    ...        password=example_password
     ... )
 
 Settings specified at runtime, as in the above example, will take precedence
