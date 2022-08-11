@@ -29,7 +29,7 @@ class AddAttributeRequestPayload(base.RequestPayload):
 
     Attributes:
         unique_identifier: The unique ID of the object on which attribute
-            deletion should be performed.
+            addition should be performed.
         new_attribute: The attribute to add on the specified object.
     """
 
@@ -101,7 +101,7 @@ class AddAttributeRequestPayload(base.RequestPayload):
                 object.
             kmip_version (KMIPVersion): An enumeration defining the KMIP
                 version with which the object will be decoded. Optional,
-                defaults to KMIP 1.0.
+                defaults to KMIP 2.0.
 
         Raises:
             VersionNotSupported: Raised when a KMIP version is provided that
@@ -141,7 +141,7 @@ class AddAttributeRequestPayload(base.RequestPayload):
             )
         else:
             raise exceptions.InvalidKmipEncoding(
-                "TheAddAttribute request payload encoding is missing the new "
+                "The AddAttribute request payload encoding is missing the new "
                 "attribute field."
             )
 
@@ -158,7 +158,7 @@ class AddAttributeRequestPayload(base.RequestPayload):
                 object.
             kmip_version (KMIPVersion): An enumeration defining the KMIP
                 version with which the object will be encoded. Optional,
-                defaults to KMIP 1.0.
+                defaults to KMIP 2.0.
 
         Raises:
             VersionNotSupported: Raised when a KMIP version is provided that
@@ -251,7 +251,7 @@ class AddAttributeResponsePayload(base.ResponsePayload):
 
         Args:
             unique_identifier (string): The unique ID of the object on
-                which the attribute was addeed. Defaults to None. Required for
+                which the attribute was added. Defaults to None. Required for
                 read/write.
         """
         super(AddAttributeResponsePayload, self).__init__()
@@ -289,7 +289,7 @@ class AddAttributeResponsePayload(base.ResponsePayload):
                 object.
             kmip_version (enum): A KMIPVersion enumeration defining the KMIP
                 version with which the object will be decoded. Optional,
-                defaults to KMIP 1.0.
+                defaults to KMIP 2.0.
 
         Raises:
             VersionNotSupported: Raised when a KMIP version is provided that
@@ -337,7 +337,7 @@ class AddAttributeResponsePayload(base.ResponsePayload):
                 object.
             kmip_version (enum): A KMIPVersion enumeration defining the KMIP
                 version with which the object will be encoded. Optional,
-                defaults to KMIP 1.0.
+                defaults to KMIP 2.0.
 
         Raises:
             VersionNotSupported: Raised when a KMIP version is provided that

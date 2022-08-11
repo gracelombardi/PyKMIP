@@ -62,6 +62,9 @@ class RequestPayloadFactory(PayloadFactory):
     def _create_modify_attribute_payload(self):
         return payloads.ModifyAttributeRequestPayload()
 
+    def _create_add_attribute_payload(self):
+        return payloads.AddAttributeRequestPayload()
+
     def _create_destroy_payload(self):
         return payloads.DestroyRequestPayload()
 

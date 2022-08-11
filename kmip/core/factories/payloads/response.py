@@ -62,6 +62,9 @@ class ResponsePayloadFactory(PayloadFactory):
     def _create_modify_attribute_payload(self):
         return payloads.ModifyAttributeResponsePayload()
 
+    def _create_add_attribute_payload(self):
+        return payloads.AddAttributeResponsePayload()
+
     def _create_destroy_payload(self):
         return payloads.DestroyResponsePayload()
 

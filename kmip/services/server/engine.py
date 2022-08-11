@@ -1316,6 +1316,8 @@ class KmipEngine(object):
             return self._process_set_attribute(payload)
         elif operation == enums.Operation.MODIFY_ATTRIBUTE:
             return self._process_modify_attribute(payload)
+        elif operation == enums.Operation.ADD_ATTRIBUTE:
+            return self._process_add_attribute(payload)
         elif operation == enums.Operation.MAC:
             return self._process_mac(payload)
         elif operation == enums.Operation.SIGN:
@@ -1940,6 +1942,44 @@ class KmipEngine(object):
                 unique_identifier=unique_identifier,
                 attribute=modified_attribute
             )
+
+    @_kmip_version_supported('2.0')
+    def _process_add_attribute(self, payload):
+        self._logger.info("Processing operation: AddAttribute")
+
+        unique_identifier = self._id_placeholder
+        if payload.unique_identifier:
+            unique_identifier = payload.unique_identifier
+
+        managed_object = self._get_object_with_access_controls(
+            unique_identifier,
+            enums.Operation.ADD_ATTRIBUTE
+        )
+
+        attribute_name = enums.convert_attribute_tag_to_name(
+            payload.new_attribute.attribute.tag
+        )
+        if not self._attribute_policy.is_attribute_modifiable_by_client(
+                attribute_name
+        ):
+            raise exceptions.KmipError(
+                status=enums.ResultStatus.OPERATION_FAILED,
+                reason=enums.ResultReason.READ_ONLY_ATTRIBUTE,
+                message=(
+                    "The '{}' attribute is read-only and cannot be modified "
+                    "by the client.".format(attribute_name)
+                )
+            )
+
+        self._set_attributes_on_managed_object(
+            managed_object,
+            {attribute_name: payload.new_attribute.attribute}
+        )
+        self._data_session.commit()
+
+        return payloads.AddAttributeResponsePayload(
+            unique_identifier=unique_identifier
+        )
 
     @_kmip_version_supported('1.0')
     def _process_register(self, payload):

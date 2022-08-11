@@ -123,6 +123,8 @@ class ProxyKmipClient(object):
         # TODO (peter-hamilton) Add a multiprocessing lock for synchronization.
         self._is_open = False
 
+        self.kmip_version = enums.KMIPVersion.KMIP_2_0
+
     @property
     def kmip_version(self):
         """
@@ -457,6 +459,7 @@ class ProxyKmipClient(object):
         Returns:
             string: The ID of the managed object the attribute was added on.
         """
+        print(kwargs.get("attribute_name"))
         a = self.attribute_value_factory.create_attribute_value_by_enum(
             enums.convert_attribute_name_to_tag(kwargs.get("attribute_name")),
             kwargs.get("attribute_value")
