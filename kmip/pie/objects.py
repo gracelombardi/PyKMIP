@@ -47,6 +47,26 @@ app_specific_info_map = sqlalchemy.Table(
     )
 )
 
+vendor_attribute_map = sqlalchemy.Table(
+    "vendor_attribute_map",
+    sql.Base.metadata,
+    sqlalchemy.Column(
+        "managed_object_id",
+        sqlalchemy.Integer,
+        sqlalchemy.ForeignKey(
+            "managed_objects.uid",
+            ondelete="CASCADE"
+        )
+    ),
+    sqlalchemy.Column(
+        "vendor_attribute_id",
+        sqlalchemy.Integer,
+        sqlalchemy.ForeignKey(
+            "vendor_attribute.id",
+            ondelete="CASCADE"
+        )
+    )
+)
 
 object_group_map = sqlalchemy.Table(
     "object_group_map",
@@ -117,6 +137,13 @@ class ManagedObject(sql.Base):
         order_by="ApplicationSpecificInformation.id",
         passive_deletes=True
     )
+    vendor_attribute = sqlalchemy.orm.relationship(
+        "VendorAttribute",
+        secondary=vendor_attribute_map,
+        back_populates="managed_objects",
+        order_by="VendorAttribute.id",
+        passive_deletes=True
+    )
     object_groups = sqlalchemy.orm.relationship(
         "ObjectGroup",
         secondary=object_group_map,
@@ -153,6 +180,7 @@ class ManagedObject(sql.Base):
         # and are subject to change.
         self._application_specific_informations = list()
         self._contact_information = None
+        self._vendor_attributes = list()
         self._object_groups = list()
 
         # The following attributes are placeholders for attributes that are
@@ -658,7 +686,7 @@ class SymmetricKey(Key):
     }
 
     def __init__(self, algorithm, length, value, masks=None,
-                 name='Symmetric Key', key_wrapping_data=None, app_specific_info=None):
+                 name='Symmetric Key', key_wrapping_data=None, app_specific_info=None, vendor_attribute=None):
         """
         Create a SymmetricKey.
 
@@ -676,6 +704,8 @@ class SymmetricKey(Key):
                 Optional, defaults to None.
             app_specific_info(list): A list of dictionaries containing application_namespace and application_data.
                 Optional, defaults to None.
+            vendor_attribute(list): A list of dictionaries containing vendor identification, attribute name, and
+                attribute value. Optional, defaults to None.
         """
         super(SymmetricKey, self).__init__(
             key_wrapping_data=key_wrapping_data
@@ -694,6 +724,9 @@ class SymmetricKey(Key):
 
         if app_specific_info:
             self._application_specific_informations = app_specific_info
+
+        if vendor_attribute:
+            self._vendor_attributes = vendor_attribute
 
         # All remaining attributes are not considered part of the public API
         # and are subject to change.
@@ -826,7 +859,7 @@ class PublicKey(Key):
 
     def __init__(self, algorithm, length, value,
                  format_type=enums.KeyFormatType.X_509, masks=None,
-                 name='Public Key', key_wrapping_data=None, app_specific_info=None):
+                 name='Public Key', key_wrapping_data=None, app_specific_info=None, vendor_attribute=None):
         """
         Create a PublicKey.
 
@@ -846,6 +879,9 @@ class PublicKey(Key):
                 Optional, defaults to None.
             app_specific_info(list): A list of dictionaries containing application_namespace and application_data.
                 Optional, defaults to None.
+            vendor_attribute(list): A list of dictionaries containing vendor identification, attribute name, and
+                attribute value. Optional, defaults to None.
+
         """
         super(PublicKey, self).__init__(
             key_wrapping_data=key_wrapping_data
@@ -868,6 +904,9 @@ class PublicKey(Key):
 
         if app_specific_info:
             self._application_specific_informations = app_specific_info
+
+        if vendor_attribute:
+            self._vendor_attributes = vendor_attribute
 
         # All remaining attributes are not considered part of the public API
         # and are subject to change.
@@ -996,7 +1035,7 @@ class PrivateKey(Key):
     }
 
     def __init__(self, algorithm, length, value, format_type, masks=None,
-                 name='Private Key', key_wrapping_data=None, app_specific_info=None):
+                 name='Private Key', key_wrapping_data=None, app_specific_info=None, vendor_attribute=None):
         """
         Create a PrivateKey.
 
@@ -1015,6 +1054,8 @@ class PrivateKey(Key):
                 Optional, defaults to None.
             app_specific_info(list): A list of dictionaries containing application_namespace and application_data.
                 Optional, defaults to None.
+            vendor_attribute(list): A list of dictionaries containing vendor identification, attribute name, and
+                attribute value. Optional, defaults to None.
         """
         super(PrivateKey, self).__init__(
             key_wrapping_data=key_wrapping_data
@@ -1037,6 +1078,9 @@ class PrivateKey(Key):
 
         if app_specific_info:
             self._application_specific_informations = app_specific_info
+
+        if vendor_attribute:
+            self._vendor_attributes = vendor_attribute
 
         # All remaining attributes are not considered part of the public API
         # and are subject to change.
@@ -1595,7 +1639,7 @@ class SecretData(CryptographicObject):
         'sqlite_autoincrement': True
     }
 
-    def __init__(self, value, data_type, masks=None, name='Secret Data', app_specific_info=None):
+    def __init__(self, value, data_type, masks=None, name='Secret Data', app_specific_info=None, vendor_attribute=None):
         """
         Create a SecretData object.
 
@@ -1608,6 +1652,8 @@ class SecretData(CryptographicObject):
             name(string): The string name of the key.
             app_specific_info(list): A list of dictionaries containing application_namespace and application_data.
                 Optional, defaults to None.
+            vendor_attribute(list): A list of dictionaries containing vendor identification, attribute name, and
+                attribute value. Optional, defaults to None.
         """
         super(SecretData, self).__init__()
 
@@ -1619,6 +1665,9 @@ class SecretData(CryptographicObject):
         
         if app_specific_info:
             self._application_specific_informations = app_specific_info
+
+        if vendor_attribute:
+            self._vendor_attributes = vendor_attribute
 
         if masks:
             self.cryptographic_usage_masks = masks
@@ -1893,6 +1942,127 @@ class ApplicationSpecificInformation(sql.Base):
 
     def __ne__(self, other):
         if isinstance(other, ApplicationSpecificInformation):
+            return not (self == other)
+        else:
+            return NotImplemented
+
+
+class VendorAttribute(sql.Base):
+    __tablename__ = "vendor_attribute"
+    id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True)
+    _vendor_identification = sqlalchemy.Column(
+        "vendor_identification",
+        sqlalchemy.String
+    )
+    _attribute_name = sqlalchemy.Column(
+        "attribute_name",
+        sqlalchemy.String
+    )
+    _attribute_value = sqlalchemy.Column(
+        "attribute_value",
+        sqlalchemy.String
+    )
+    managed_objects = sqlalchemy.orm.relationship(
+        "ManagedObject",
+        secondary=vendor_attribute_map,
+        back_populates="vendor_attribute"
+    )
+
+    def __init__(self,
+                 vendor_identification=None,
+                 attribute_name=None,
+                 attribute_value=None):
+        """
+        Create a Vendor attribute.
+
+        Args:
+            vendor_identification (str): A string specifying the vendor identification. Required.
+            attribute_name (str): A string specifying the attribute name. Required.
+            attribute_value (str): A string specifying the attribute value. Required.
+        """
+        super(VendorAttribute, self).__init__()
+        self.vendor_identification = vendor_identification
+        self.attribute_name = attribute_name
+        self.attribute_value = attribute_value
+
+    @property
+    def vendor_identification(self):
+        return self._vendor_identification
+
+    @vendor_identification.setter
+    def vendor_identification(self, value):
+        if (value is None) or (isinstance(value, six.string_types)):
+            self._vendor_identification = value
+        else:
+            raise TypeError("The vendor identification must be a string.")
+
+    @property
+    def attribute_name(self):
+        return self._attribute_name
+
+    @attribute_name.setter
+    def attribute_name(self, value):
+        if (value is None) or (isinstance(value, six.string_types)):
+            self._attribute_name = value
+        else:
+            raise TypeError("The attribute name must be a string.")
+
+    @property
+    def attribute_value(self):
+        return self._attribute_value
+
+    @attribute_value.setter
+    def attribute_value(self, value):
+        if (value is None) or (isinstance(value, six.string_types)):
+            self._attribute_value = value
+        else:
+            raise TypeError("The attribute value must be a string.")
+
+    def __repr__(self):
+        vendor_identification = "vendor_identification='{}'".format(
+            self.vendor_identification
+        )
+        attribute_name = "attribute_name='{}'".format(
+            self.attribute_name
+        )
+        attribute_value = "attribute_value='{}'".format(
+            self.attribute_value
+        )
+
+        return "VendorAttribute({})".format(
+            ", ".join(
+                [
+                    vendor_identification,
+                    attribute_name,
+                    attribute_value
+                ]
+            )
+        )
+
+    def __str__(self):
+        return str(
+            {
+                "vendor_identification": self.vendor_identification,
+                "attribute_name": self.attribute_name,
+                "attribute_value": self.attribute_value
+            }
+        )
+
+    def __eq__(self, other):
+        if isinstance(other, VendorAttribute):
+            if self.vendor_identification != other.vendor_identification:
+                return False
+            elif self.attribute_name != other.attribute_name:
+                return False
+            elif self.attribute_value != other.attribute_value:
+                return False
+            else:
+                return True
+        else:
+            return NotImplemented
+
+    def __ne__(self, other):
+        if isinstance(other, VendorAttribute):
             return not (self == other)
         else:
             return NotImplemented

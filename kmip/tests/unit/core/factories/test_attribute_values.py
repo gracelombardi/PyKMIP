@@ -498,13 +498,13 @@ class TestAttributeValueFactory(testtools.TestCase):
         self.assertEqual(0, date.value)
         self.assertEqual(enums.Tags.LAST_CHANGE_DATE, date.tag)
 
-    def test_create_custom_attribute(self):
+    def test_create_vendor_attribute(self):
         """
-        Test that a CustomAttribute can be created.
+        Test that a VendorAttribute can be created.
         """
         custom = self.factory.create_attribute_value(
-            enums.AttributeType.CUSTOM_ATTRIBUTE, None)
-        self.assertIsInstance(custom, attributes.CustomAttribute)
+            enums.AttributeType.VENDOR_ATTRIBUTE, None)
+        self.assertIsInstance(custom, attributes.VendorAttribute)
 
     def test_create_sensitive(self):
         """

@@ -566,12 +566,20 @@ class ProxyKmipClient(object):
                         index=0
                     )
                     object_attributes.append(attribute)
+        if hasattr(managed_object, '_vendor_attributes'):
+            if managed_object._vendor_attributes:
+                for info in managed_object._vendor_attributes:
+                    attribute = self.attribute_factory.create_attribute(
+                        enums.AttributeType.VENDOR_ATTRIBUTE,
+                        info,
+                        index=0
+                    )
+                    object_attributes.append(attribute)
         template = cobjects.TemplateAttribute(attributes=object_attributes)
         object_type = managed_object.object_type
         # Register the managed object and handle the results
         secret = self.object_factory.convert(managed_object)
         result = self.proxy.register(object_type, template, secret)
-
         status = result.result_status.value
         if status == enums.ResultStatus.SUCCESS:
             return result.uuid

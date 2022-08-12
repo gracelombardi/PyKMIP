@@ -108,6 +108,8 @@ class AttributeValueFactory(object):
             return primitives.Boolean(value, enums.Tags.SENSITIVE)
         elif name is enums.AttributeType.CUSTOM_ATTRIBUTE:
             return attributes.CustomAttribute(value)
+        elif name is enums.AttributeType.VENDOR_ATTRIBUTE:
+            return self._create_vendor_attribute(value)
         else:
             if not isinstance(name, str):
                 raise ValueError('Unrecognized attribute type: '
@@ -200,6 +202,8 @@ class AttributeValueFactory(object):
             return primitives.Boolean(value, enums.Tags.SENSITIVE)
         elif enum is enums.Tags.CUSTOM_ATTRIBUTE:
             return attributes.CustomAttribute(value)
+        elif enum is enums.Tags.VENDOR_ATTRIBUTE:
+            return self._create_vendor_attribute(value)
         else:
             raise ValueError("Unrecognized attribute type: {}".format(enum))
 
@@ -280,6 +284,16 @@ class AttributeValueFactory(object):
             )
         else:
             return attributes.ApplicationSpecificInformation()
+
+    def _create_vendor_attribute(self, info):
+        if info:
+            return attributes.VendorAttribute(
+                vendor_identification=info.get("vendor_identification"),
+                attribute_name=info.get("attribute_name"),
+                attribute_value=info.get("attribute_value")
+            )
+        else:
+            return attributes.VendorAttribute()
 
     def _create_contact_information(self, info):
         if info is None:
