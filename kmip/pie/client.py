@@ -123,6 +123,8 @@ class ProxyKmipClient(object):
         # TODO (peter-hamilton) Add a multiprocessing lock for synchronization.
         self._is_open = False
 
+        self.kmip_version = enums.KMIPVersion.KMIP_2_0
+
     @property
     def kmip_version(self):
         """
@@ -431,6 +433,47 @@ class ProxyKmipClient(object):
         )
 
         return response_payload.unique_identifier, response_payload.attribute
+
+    @is_connected
+    def add_attribute(self, unique_identifier=None, **kwargs):
+        """
+        Adds an attribute on a KMIP managed object.
+
+        Args:
+            unique_identifier (string): The ID of the managed object.
+            **kwargs (various): A placeholder for attribute-related fields.
+                Supported parameters include:
+                    attribute_name (string): The name of the attribute being
+                        set. Required.
+                    attribute_value (various): The value of the attribute
+                        being set. Required.
+
+                Here is an example. To set an object's 'sensitive' attribute
+                to True, specify:
+                    attribute_name='Sensitive'
+                    attribute_value=True
+
+                For a list of all supported attributes, see the
+                AttributeValueFactory.
+
+        Returns:
+            string: The ID of the managed object the attribute was added on.
+        """
+        print(kwargs.get("attribute_name"))
+        a = self.attribute_value_factory.create_attribute_value_by_enum(
+            enums.convert_attribute_name_to_tag(kwargs.get("attribute_name")),
+            kwargs.get("attribute_value")
+        )
+        request_payload = payloads.AddAttributeRequestPayload(
+            unique_identifier=unique_identifier,
+            new_attribute=cobjects.NewAttribute(attribute=a)
+        )
+        response_payload = self.proxy.send_request_payload(
+            enums.Operation.ADD_ATTRIBUTE,
+            request_payload
+        )
+
+        return response_payload.unique_identifier
 
     @is_connected
     def set_attribute(self, unique_identifier=None, **kwargs):

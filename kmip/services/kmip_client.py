@@ -362,6 +362,12 @@ class KMIPProxy(object):
                     "The request payload for the ModifyAttribute operation "
                     "must be a ModifyAttributeRequestPayload object."
                 )
+        elif operation == enums.Operation.ADD_ATTRIBUTE:
+            if not isinstance(payload, payloads.AddAttributeRequestPayload):
+                raise TypeError(
+                    "The request payload for the AddAttribute operation "
+                    "must be a AddAttributeRequestPayload object."
+                )
 
         batch_item = messages.RequestBatchItem(
             operation=primitives.Enumeration(
@@ -422,6 +428,15 @@ class KMIPProxy(object):
                 raise exceptions.InvalidMessage(
                     "Invalid response payload received for the "
                     "ModifyAttribute operation."
+                )
+        elif batch_item.operation.value == enums.Operation.ADD_ATTRIBUTE:
+            if not isinstance(
+                batch_item.response_payload,
+                payloads.AddAttributeResponsePayload
+            ):
+                raise exceptions.InvalidMessage(
+                    "Invalid response payload received for the "
+                    "AddAttribute operation."
                 )
 
         return batch_item.response_payload
