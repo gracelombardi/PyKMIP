@@ -979,6 +979,30 @@ class AttributePolicy(object):
                 ),
                 contents.ProtocolVersion(1, 0)
             ),
+            'Vendor Attribute': AttributeRuleSet(
+                False,
+                ('server', 'client'),  # Only if omitted in client request
+                True,  # Only if attribute omitted in client request
+                True,
+                True,
+                True,
+                (
+                    enums.Operation.RECERTIFY,
+                    enums.Operation.REKEY,
+                    enums.Operation.REKEY_KEY_PAIR
+                ),
+                (
+                    enums.ObjectType.CERTIFICATE,
+                    enums.ObjectType.SYMMETRIC_KEY,
+                    enums.ObjectType.PUBLIC_KEY,
+                    enums.ObjectType.PRIVATE_KEY,
+                    enums.ObjectType.SPLIT_KEY,
+                    enums.ObjectType.TEMPLATE,
+                    enums.ObjectType.SECRET_DATA,
+                    enums.ObjectType.OPAQUE_DATA
+                ),
+                contents.ProtocolVersion(1, 0)
+            ),
             'Contact Information': AttributeRuleSet(
                 False,
                 ('server', 'client'),

@@ -450,37 +450,37 @@ class TestEnumUtilityFunctions(testtools.TestCase):
 
     def test_is_attribute_removed_in_kmip_2_0(self):
         result = enums.is_attribute(
-            enums.Tags.CUSTOM_ATTRIBUTE,
+            enums.Tags.VENDOR_ATTRIBUTE,
             enums.KMIPVersion.KMIP_1_0
         )
         self.assertTrue(result)
 
         result = enums.is_attribute(
-            enums.Tags.CUSTOM_ATTRIBUTE,
+            enums.Tags.VENDOR_ATTRIBUTE,
             enums.KMIPVersion.KMIP_1_1
         )
         self.assertTrue(result)
 
         result = enums.is_attribute(
-            enums.Tags.CUSTOM_ATTRIBUTE,
+            enums.Tags.VENDOR_ATTRIBUTE,
             enums.KMIPVersion.KMIP_1_2
         )
         self.assertTrue(result)
 
         result = enums.is_attribute(
-            enums.Tags.CUSTOM_ATTRIBUTE,
+            enums.Tags.VENDOR_ATTRIBUTE,
             enums.KMIPVersion.KMIP_1_3
         )
         self.assertTrue(result)
 
         result = enums.is_attribute(
-            enums.Tags.CUSTOM_ATTRIBUTE,
+            enums.Tags.VENDOR_ATTRIBUTE,
             enums.KMIPVersion.KMIP_1_4
         )
         self.assertTrue(result)
 
         result = enums.is_attribute(
-            enums.Tags.CUSTOM_ATTRIBUTE,
+            enums.Tags.VENDOR_ATTRIBUTE,
             enums.KMIPVersion.KMIP_2_0
         )
         self.assertFalse(result)

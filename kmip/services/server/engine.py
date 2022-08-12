@@ -740,6 +740,17 @@ class KmipEngine(object):
                     }
                 )
             return values
+        elif attr_name == "Vendor Attribute":
+            values = []
+            for info in managed_object.vendor_attribute:
+                values.append(
+                    {
+                        "vendor_identification": info.vendor_identification,
+                        "attribute_name": info.attribute_name,
+                        "attribute_value": info.attribute_value
+                    }
+                )
+            return values
         elif attr_name == 'Contact Information':
             return None
         elif attr_name == 'Last Change Date':
@@ -782,6 +793,13 @@ class KmipEngine(object):
             for count, v in enumerate(managed_object.app_specific_info):
                 if ((a.application_namespace == v.application_namespace) and
                         (a.application_data == v.application_data)):
+                    return count
+            return None
+        elif attribute_name == "Vendor Attribute":
+            a = attribute_value
+            for count, v in enumerate(managed_object.vendor_attribute):
+                if ((a.vendor_identification == v.vendor_identification) and
+                        (a.attribute_name == v.attribute_name) and (a.attribute_value == v.attribute_value)):
                     return count
             return None
         elif attribute_name == "Certificate Type":
@@ -889,6 +907,15 @@ class KmipEngine(object):
                             application_data=value.application_data
                         )
                     )
+            elif attribute_name == "Vendor Attribute":
+                for value in attribute_value:
+                    managed_object.vendor_attribute.append(
+                        objects.VendorAttribute(
+                            vendor_identification=value.vendor_identification,
+                            attribute_name=value.attribute_name,
+                            attribute_value=value.attribute_value
+                        )
+                    )
             elif attribute_name == "Object Group":
                 for value in attribute_value:
                     # TODO (peterhamilton) Enforce uniqueness of object groups
@@ -962,6 +989,11 @@ class KmipEngine(object):
             a = managed_object.app_specific_info[attribute_index]
             a.application_namespace = attribute_value.application_namespace
             a.application_data = attribute_value.application_data
+        elif attribute_name == "Vendor Attribute":
+            a = managed_object.vendor_attribute[attribute_index]
+            a.vendor_identification = attribute_value.vendor_identification
+            a.attribute_name = attribute_value.attribute_name
+            a.attribute_value = attribute_value.attribute_value
         elif attribute_name == "Name":
             name_value = attribute_value.name_value
             managed_object.names[attribute_index] = name_value.value
@@ -1005,6 +1037,14 @@ class KmipEngine(object):
                     attribute_value = objects.ApplicationSpecificInformation(
                         application_namespace=namespace,
                         application_data=attribute_value.application_data
+                    )
+            elif attribute_name == "Vendor Attribute":
+                attribute_list = managed_object.vendor_attribute
+                if attribute_value is not None:
+                    attribute_value = objects.VendorAttribute(
+                        vendor_identification=attribute_value.vendor_identification,
+                        attribute_name=attribute_value.attribute_name,
+                        attribute_value=attribute_value.attribute_value
                     )
             elif attribute_name == "Object Group":
                 attribute_list = managed_object.object_groups
@@ -2264,6 +2304,27 @@ class KmipEngine(object):
                                 "specific information attributes.".format(
                                     v.get("application_namespace"),
                                     v.get("application_data")
+                                )
+                            )
+                            add_object = False
+                            break
+                    elif name == "Vendor Attribute":
+                        vendor_identification = value.vendor_identification
+                        attribute_name = value.attribute_name
+                        attribute_value = value.attribute_value
+                        v = {
+                            "vendor_identification": vendor_identification,
+                            "attribute_name": attribute_name,
+                            "attribute_value": attribute_value
+                        }
+                        if v not in attribute:
+                            self._logger.debug(
+                                "Failed match: "
+                                "the specified vendor attributes ('{}', '{}', '{) does not match any "
+                                "of the object's associated vendor attributes.".format(
+                                    v.get("vendor_identification"),
+                                    v.get("attribute_name"),
+                                    v.get("attribute_value")
                                 )
                             )
                             add_object = False

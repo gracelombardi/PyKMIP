@@ -1273,7 +1273,6 @@ class ContactInformation(TextString):
         super(ContactInformation, self).__init__(
             value, Tags.CONTACT_INFORMATION)
 
-
 # 3.39
 # TODO (peter-hamilton) A CustomAttribute TextString is not sufficient to
 # TODO (peter-hamilton) cover all potential custom attributes. This is a
@@ -1282,6 +1281,235 @@ class CustomAttribute(TextString):
 
     def __init__(self, value=None):
         super(CustomAttribute, self).__init__(value, Tags.ATTRIBUTE_VALUE)
+
+
+class VendorAttribute(primitives.Struct):
+
+    def __init__(self, vendor_identification=None, attribute_name=None, attribute_value=None):
+        """
+        Constructs a Custom Vendor Attribute object.
+        Args:
+            vendor_identification (string): The identification string of a vendor. Defaults to None.
+            attribute_name (string): Name of the Vendor Attribute. Defaults to None.
+            attribute_value (string): Value of the Vendor Attribute Defaults to None.
+        """
+        super(VendorAttribute, self).__init__(enums.Tags.VENDOR_ATTRIBUTE)
+        self._vendor_identification = None
+        self._attribute_name = None
+        self._attribute_value = None
+
+        self.vendor_identification = vendor_identification
+        self.attribute_name = attribute_name
+        self.attribute_value = attribute_value
+
+    @property
+    def vendor_identification(self):
+        if self._vendor_identification:
+            return self._vendor_identification.value
+        return None
+
+    @vendor_identification.setter
+    def vendor_identification(self, value):
+        if value is None:
+            self._vendor_identification = None
+        elif isinstance(value, six.string_types):
+            self._vendor_identification = primitives.TextString(
+                value=value,
+                tag=enums.Tags.VENDOR_IDENTIFICATION
+            )
+        else:
+            raise TypeError("The vendor identification must be a string.")
+
+    @property
+    def attribute_name(self):
+        if self._attribute_name:
+            return self._attribute_name.value
+        return None
+
+    @attribute_name.setter
+    def attribute_name(self, value):
+        if value is None:
+            self._attribute_name = None
+        elif isinstance(value, six.string_types):
+            self._attribute_name = primitives.TextString(
+                value=value,
+                tag=enums.Tags.ATTRIBUTE_NAME
+            )
+        else:
+            raise TypeError("The attribute name must be a string.")
+
+    @property
+    def attribute_value(self):
+        if self._attribute_value:
+            return self._attribute_value.value
+        return None
+
+    @attribute_value.setter
+    def attribute_value(self, value):
+        if value is None:
+            self._attribute_value = None
+        elif isinstance(value, six.string_types):
+            self._attribute_value = primitives.TextString(
+                value=value,
+                tag=enums.Tags.ATTRIBUTE_VALUE
+            )
+        else:
+            raise TypeError("The attribute value must be a string.")
+
+    def read(self, input_buffer, kmip_version=enums.KMIPVersion.KMIP_2_0):
+        """
+        Read the data encoding the vendor attribute
+        and decode it.
+
+        Args:
+            input_buffer (stream): A data stream containing encoded object
+                data, supporting a read method; usually a BytearrayStream
+                object.
+            kmip_version (KMIPVersion): An enumeration defining the KMIP
+                version with which the object will be decoded. Optional,
+                defaults to KMIP 1.0.
+        """
+        super(VendorAttribute, self).read(
+            input_buffer,
+            kmip_version=kmip_version
+        )
+        local_buffer = utils.BytearrayStream(input_buffer.read(self.length))
+        if self.is_tag_next(enums.Tags.VENDOR_IDENTIFICATION, local_buffer):
+            self._vendor_identification = primitives.TextString(
+                tag=enums.Tags.VENDOR_IDENTIFICATION
+            )
+            self._vendor_identification.read(
+                local_buffer,
+                kmip_version=kmip_version
+            )
+        else:
+            raise exceptions.InvalidKmipEncoding(
+                "The Vendor Attribute encoding is missing the "
+                "VendorIdentification field."
+            )
+        if self.is_tag_next(enums.Tags.ATTRIBUTE_NAME, local_buffer):
+            self._attribute_name = primitives.TextString(
+                tag=enums.Tags.ATTRIBUTE_NAME
+            )
+            self._attribute_name.read(
+                local_buffer,
+                kmip_version=kmip_version
+            )
+        else:
+            raise exceptions.InvalidKmipEncoding(
+                "The Vendor Attribute encoding is missing the "
+                "AttributeName field."
+            )
+        if self.is_tag_next(enums.Tags.ATTRIBUTE_VALUE, local_buffer):
+            self._attribute_value = primitives.TextString(
+                tag=enums.Tags.ATTRIBUTE_VALUE
+            )
+            self._attribute_value.read(
+                local_buffer,
+                kmip_version=kmip_version
+            )
+        else:
+            raise exceptions.InvalidKmipEncoding(
+                "The Vendor Attribute encoding is missing the "
+                "AttributeValue field."
+            )
+
+        self.is_oversized(local_buffer)
+
+    def write(self, output_buffer, kmip_version=enums.KMIPVersion.KMIP_2_0):
+        """
+        Write the data encoding the Vendor Attribute object to a
+        buffer.
+
+        Args:
+            output_buffer (stream): A data stream in which to encode object
+                data, supporting a write method; usually a BytearrayStream
+                object.
+            kmip_version (KMIPVersion): An enumeration defining the KMIP
+                version with which the object will be encoded. Optional,
+                defaults to KMIP 1.0.
+        """
+        local_buffer = utils.BytearrayStream()
+        if self._vendor_identification:
+            self._vendor_identification.write(
+                local_buffer,
+                kmip_version=kmip_version
+            )
+        else:
+            raise exceptions.InvalidField(
+                "The Vendor Attribute object is missing the "
+                "VendorIdentification field."
+            )
+
+        if self._attribute_name:
+            self._attribute_name.write(
+                local_buffer,
+                kmip_version=kmip_version
+            )
+        else:
+            raise exceptions.InvalidField(
+                "The Vendor Attribute object is missing the "
+                "AttributeName field."
+            )
+        if self._attribute_value:
+            self._attribute_value.write(
+                local_buffer,
+                kmip_version=kmip_version
+            )
+        else:
+            raise exceptions.InvalidField(
+                "The Vendor Attribute object is missing the "
+                "AttributeValue field."
+            )
+
+        self.length = local_buffer.length()
+        super(VendorAttribute, self).write(
+            output_buffer,
+            kmip_version=kmip_version
+        )
+        output_buffer.write(local_buffer.buffer)
+
+    def __repr__(self):
+        args = [
+            "vendor_identification={}".format(
+                repr(self.vendor_identification)
+            ),
+            "attribute_name={}".format(
+                repr(self.attribute_name)
+            ),
+            "attribute_value={}".format(
+                repr(self.attribute_value)
+            )
+        ]
+        return "VendorAttribute({})".format(", ".join(args))
+
+    def __str__(self):
+        value = ", ".join(
+            [
+                "vendor_identification={}".format(self.vendor_identification),
+                "attribute_name={}".format(self.attribute_name),
+                "attribute_value={}".format(self.attribute_value)
+            ]
+        )
+        return "{" + value + "}"
+
+    def __eq__(self, other):
+        if isinstance(other, VendorAttribute):
+            if self.vendor_identification != other.vendor_identification:
+                return False
+            if self.attribute_name != other.attribute_name:
+                return False
+            if self.attribute_value != other.attribute_value:
+                return False
+            return True
+        else:
+            return NotImplemented
+
+    def __ne__(self, other):
+        if isinstance(other, VendorAttribute):
+            return not self.__eq__(other)
+        else:
+            return NotImplemented
 
 
 class DerivationParameters(Struct):

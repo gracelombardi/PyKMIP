@@ -126,7 +126,8 @@ class AttributeType(enum.Enum):
     KEY_VALUE_PRESENT                = 'Key Value Present'
     KEY_VALUE_LOCATION               = 'Key Value Location'
     ORIGINAL_CREATION_DATE           = 'Original Creation Date'
-    SENSITIVE                        = "Sensitive"
+    SENSITIVE                        = 'Sensitive'
+    VENDOR_ATTRIBUTE                 = 'Vendor Attribute'
 
 
 class AuthenticationSuite(enum.Enum):
@@ -1588,6 +1589,7 @@ class Tags(enum.Enum):
     COMMON_PROTECTION_STORAGE_MASKS          = 0x420163
     PRIVATE_PROTECTION_STORAGE_MASKS         = 0x420164
     PUBLIC_PROTECTION_STORAGE_MASKS          = 0x420165
+    VENDOR_ATTRIBUTE                         = 0x420166
 
 
 class TicketType(enum.Enum):
@@ -1759,7 +1761,8 @@ attribute_name_tag_table = [
     ("Usage Limits",                      Tags.USAGE_LIMITS),
     ("X.509 Certificate Identifier",      Tags.X_509_CERTIFICATE_IDENTIFIER),
     ("X.509 Certificate Issuer",          Tags.X_509_CERTIFICATE_ISSUER),
-    ("X.509 Certificate Subject",         Tags.X_509_CERTIFICATE_SUBJECT)
+    ("X.509 Certificate Subject",         Tags.X_509_CERTIFICATE_SUBJECT),
+    ("Vendor Attribute",                  Tags.VENDOR_ATTRIBUTE)
 ]
 
 
@@ -2025,7 +2028,8 @@ def is_attribute(tag, kmip_version=None):
         Tags.PROTECTION_STORAGE_MASK,
         Tags.QUANTUM_SAFE,
         Tags.SHORT_UNIQUE_IDENTIFIER,
-        Tags.ATTRIBUTE
+        Tags.ATTRIBUTE,
+        Tags.VENDOR_ATTRIBUTE
     ]
     kmip_2_0_attribute_tags.remove(Tags.CERTIFICATE_IDENTIFIER)
     kmip_2_0_attribute_tags.remove(Tags.CERTIFICATE_SUBJECT)
